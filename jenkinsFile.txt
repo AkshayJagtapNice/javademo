@@ -1,23 +1,37 @@
-pipeline{
-         agent {
-            label 'built-in'
-               }
-
-         stages {
-              stage(" checkout the code "){
-                  steps{
-                      checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/AkshayJagtapNice/javademo.git']])
-                  }
-              }
-              stage("build") {
-            steps {
-                sh 'mvn package'
-                   }
-                }
-         }  
-         post {
-  always {
-    cleanWs()
+pipeline {
+  agent {
+    label 'built-in'
   }
-}
-}
+  parameters {
+    string(name: 'branch_name', defaultValue: 'master', description: 'Branch name')
+    string(name: 'STRING_PARAM', defaultValue: 'default value', description: 'A string parameter')
+    booleanParam(name: 'BOOLEAN_PARAM', defaultValue: true, description: 'A boolean parameter')
+    choice(name: 'CHOICE_PARAM', choices: ['Option 1', 'Option 2', 'Option 3'], description: 'A choice parameter')
+    text(name: 'MULTI_LINE_STRING', defaultValue: 'default\nvalue', description: 'A multi-line string parameter')
+  }
+
+  stages {
+    stage(" checkout the code ") {
+      steps {
+        git branch: "$branch_name", url: 'https://github.com/AkshayJagtapNice/javademo.git'
+      }
+    }
+    stage("build") {
+      steps {
+        sh 'mvn package'
+      }
+    }
+    stage('Example') {
+      steps {
+        echo "String Parameter: ${params.STRING_PARAM}"
+        echo "Boolean Parameter: ${params.BOOLEAN_PARAM}"
+        echo "Choice Parameter: ${params.CHOICE_PARAM}"
+        echo "Multi-Line String Parameter: ${params.MULTI_LINE_STRING}"
+      }
+    }
+    post {
+      always {
+        cleanWs()
+      }
+    }
+  }
