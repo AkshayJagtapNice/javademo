@@ -29,8 +29,8 @@ pipeline {
         echo "Multi-Line String Parameter: ${params.MULTI_LINE_STRING}"
       }
     }
-    post {
-      always {
+    stage('Clean') {
+      steps {
         cleanWs()
       }
     }
