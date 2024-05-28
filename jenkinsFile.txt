@@ -1,12 +1,12 @@
 pipeline{
          agent {
-            label 'agent1'
+            label 'built-in'
                }
 
          stages {
               stage(" checkout the code "){
                   steps{
-                      checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/cloud-dev-user/javademo.git']])
+                      checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/AkshayJagtapNice/javademo.git']])
                   }
               }
               stage("build") {
